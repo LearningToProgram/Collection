@@ -1,5 +1,7 @@
-#include <iostream>
+#ifndef HASHTABLE_H
+#define HASHTABLE_H
 
+#include <iostream>
 class HashEntry
 {
 public:
@@ -9,16 +11,16 @@ public:
 		this->val = val;
 	}
 
-	inline int GetKey() { return key; }
-	inline int GetValue() { return val; }
+	inline int GetKey() const { return key; }
+	inline int GetValue() const { return val; }
 private:
 	int key, val;
 };
 
-class HashMap
+class HashTable
 {
 public:
-	inline HashMap() : mTableSize(128)
+	inline HashTable() : mTableSize(128)
 	{
 		table = new HashEntry*[mTableSize];
 		for (int i = 0; i < mTableSize; i++)
@@ -46,9 +48,9 @@ public:
 
 		while (table[hash] != NULL && table[hash]->GetKey() == key)
 		{
-				hash = (hash + 1) % mTableSize;
-				key = hash;
-				std::cout << "[ PUT ] Hash: " << hash << "\n";
+			hash = (hash + 1) % mTableSize;
+			key = hash;
+			std::cout << "[ PUT ] Hash: " << hash << "\n";
 		}
 
 		if (table[hash] == NULL)
@@ -56,7 +58,7 @@ public:
 		table[hash] = new HashEntry(key, value);
 	}
 
-	inline ~HashMap()
+	inline ~HashTable()
 	{
 		for (int i = 0; i < mTableSize; i++)
 			if (table[i] != NULL)
@@ -69,7 +71,7 @@ public:
 		std::cout << "\n---------------TABLE OF CONTENT----------------\n";
 		for (int i = 0; i < mTableSize; i++)
 		{
-			if(nonEmpty && table[i] != NULL)
+			if (nonEmpty && table[i] != NULL)
 				std::cout << "i( " << i << " )  \t" << table[i]->GetValue() << "\n";
 		}
 		std::cout << "-----------------------------------------------\n";
@@ -78,24 +80,24 @@ public:
 private:
 	HashEntry **table;
 	const int mTableSize;
-};
+}; 
 
-int main()
+void HashTreeExample()
 {
 	std::cout << "Insert value -->\n";
-	HashMap hm;
-	hm.Put(125, 1984);
-	hm.Put(128, 1984);
-	hm.Put(1, 1985);
-	hm.Put(1, 1984);
-	hm.Put(1, 19);
-	hm.Put(1, 1918745);
+	HashTable ht;
+	ht.Put(125, 1984);
+	ht.Put(128, 1984);
+	ht.Put(1, 1985);
+	ht.Put(1, 1984);
+	ht.Put(1, 19);
+	ht.Put(1, 1918745);
 	std::cout << "<-- Insert value\n\n";
-	hm.ShowTable(true);
+	ht.ShowTable(true);
 	std::cout << "Get value -->\n"
-			  << hm.Get(1) << "\n"
-			  << hm.Get(2) << "\n"
-			  << "<-- Get value\n";
-	
-	return 0;
+		<< ht.Get(1) << "\n"
+		<< ht.Get(2) << "\n"
+		<< "<-- Get value\n";
 }
+
+#endif
